@@ -352,7 +352,10 @@ def save_qa_changes():
     fake_id = data.get('fake_id')
     # Tìm câu hỏi và câu trả lời cần chỉnh sửa
     qas_answer = QASAnswers.query.get(qa_id)
-    
+    # para = Paragraph.query.get(qas_answer.paragraph_id)
+    # print(para.context)
+    # answer_start = sentence_position(answer,para.context)
+    # print("123")
     print(fake_id)
 
     if qas_answer:
