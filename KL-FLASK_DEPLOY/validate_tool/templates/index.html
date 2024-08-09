@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="vie">
+  <head>
+    <meta charset="UTF-8" />
+    <title> </title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static',filename='style.css') }}"
+    />
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+  </head>
+  <body>
+    <div class="header">
+      <div class="title">
+        <div class="header1">Title:</div>
+        <div id="title-id"></div> <!-- Removed Flask server value -->
+      </div>
+
+      <div class="file-name">
+        <div class="header1">Filename:</div>
+        <div id="file-name-id"></div> <!-- Removed Flask server value -->
+      </div>
+    
+      <div class="current-paragraph">
+        <div class="header1">Current-paragraph:</div>
+        <div id="current-paragraph-id"></div> <!-- Removed Flask server value -->
+      </div>
+
+      <div class="numofQuestion">
+        <div class="header1">Number of questions:</div>
+        <div id="numofQuestion-id"></div> <!-- Removed Flask server value -->
+      </div>
+    </div>
+
+    <div class="section1">
+      <div class="left">
+        <div class="task-description">Task description</div>
+        <div class="description-box">
+          "Read the provided text and the associated questions and answers carefully. After reviewing the information, evaluate whether the set of questions effectively assesses the content of the text. Consider if the questions are clear, relevant, and comprehensive in covering the main points. Based on your assessment, determine if the questions meet the criteria for an effective evaluation."
+        </div>
+        <table class="table1">
+          <td><div class="content">Content</div></td>
+        </table>
+        
+        <div class="content-box" id="selectable-text-area"></div> <!-- Removed Flask server value -->
+
+        <a href="#" id="PreviousButton" disabled> Previous </a> <!-- Disabled Previous button -->
+        <a href="#" id="NextButton" disabled> Next </a> <!-- Disabled Next button -->
+        <button id="saveButton" disabled>Save</button> <!-- Disabled Save button -->
+      </div>
+
+      <div class="right">
+        <form action="/upload_json" method="post" enctype="multipart/form-data">
+          <input type="file" name="file" id="choose-file" />
+          <input type="submit" value="Upload" id="upload" onclick="upload()" />
+        </form>
+
+        <div class="data-box">
+         
+          <div class="question-container">
+              <div class="noofquestion">Q1</div>
+              <div id="question"></div>
+          </div>
+          
+          <div class="toggle-container">
+            <div class="decor">Answer</div>
+
+            <div class="toggle-buttons">
+                <input 
+                    id="toggle-on" 
+                    name="toggl-off" 
+                    type="radio" 
+                    value="no"        
+                >
+                <label for="toggle-on-">NO</label>
+                <input 
+                    id="toggle-off-" 
+                    name="toggle-" 
+                    type="radio" 
+                    value="yes"
+            
+                >
+                <label for="toggle-off-">YES</label>
+                <input type="hidden" name="qa_id" value="">
+            </div>
+
+        
+          </div>
+      
+          <div id="displaySelectedquestion"></div>
+          
+      </div>
+
+        <button id="exportButton" style="margin-left: 65vh; margin-top: 10px;" disabled>Export JSON File</button> <!-- Disabled Export button -->
+      </div>
+    </div>
+  </body>
+</html>

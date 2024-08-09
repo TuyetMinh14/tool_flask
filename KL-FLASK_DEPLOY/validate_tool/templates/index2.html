@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="vie">
+  <head>
+    <meta charset="UTF-8" />
+    <title> </title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static',filename='style.css') }}"
+    />
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+  </head>
+  <body>
+    <div class="header">
+      <div class="title">
+        <div class="header1">Title:</div>
+        <div id="title-id">{{title}}</div>
+      </div>
+
+      <div class="file-name">
+        <div class="header1">Filename:</div>
+        <div id="file-name-id">{{ file_name or 'No filename provided' }}</div>
+        {% if not file_name %}
+        <div id="filename-form-container" class="filename-form">
+            <form id="filename-form" method="post" action="{{ url_for('display', id_para=id_para, file_name='NULL') }}">
+                <input type="text" name="file_name" placeholder="Enter filename" required>
+                <button type="submit">Save</button>
+            </form>
+        </div>
+        <button onclick="showFilenameForm()">Enter File Name</button>
+        {% endif %}
+    </div>
+    
+      <div class="current-paragraph">
+        <div class="header1">Current-paragraph:</div>
+        <div id="current-paragraph-id">{{current_paragraph_str}}</div>
+      </div>
+
+      <div class="numofQuestion">
+
+
+        <div class="header1">Number of questions:</div>
+        <div id="numofQuestion-id">{{total_ans1}}</div>
+      </div>
+    </div>
+
+    <div class="section1">
+      <div class="left">
+        <div class="task-description">Task description</div>
+        <div class="description-box">"Read the provided text and the associated questions and answers carefully. After reviewing the information, evaluate whether the set of questions effectively assesses the content of the text. Consider if the questions are clear, relevant, and comprehensive in covering the main points. Based on your assessment, determine if the questions meet the criteria for an effective evaluation."</div>
+        <table class="table1">
+          <td> <div class="content">Content </div></td>
+          
+        </table>
+
+        
+        <div class="content-box" id="selectable-text-area">
+         {{current_paragraph.context}}
+        </div>
+        
+
+        {% if current_paragraph.has_prev and current_paragraph.prev_para() %}
+        <a
+          href="{{ url_for('display', id_para=current_paragraph.prev_para().id, file_name=file_name,id_qs=current_paragraph.prev_para().get_min_qas_answer().id) }}"
+          id="PreviousButton"
+        >
+          Previous
+        </a>
+        {% else %} 
+        
+        <a href="#" id="PreviousButton"> Previous </a>
+        {% endif %} 
+        {% if current_paragraph.has_next and
+        current_paragraph.next_para() %}
+        <a
+          href="{{ url_for('display', id_para=current_paragraph.next_para().id, file_name=file_name,id_qs=current_paragraph.next_para().get_min_qas_answer().id) }}"
+          id="NextButton"
+        >
+          Next
+        </a>
+        {% else %}
+        
+        <a href="#" id="NextButton"> Next </a>
+        {% endif %}
+        <button id="saveButton">Save</button>
+      </div>
+
+      <div class="right">
+        <form action="/upload_json" method="post" enctype="multipart/form-data">
+          <input type="file" name="file" id="choose-file" />
+          <input type="submit" value="Upload" id="upload" onclick="upload()" />
+        </form>
+
+        
+
+        <div class="data-box">
+          {% for qas_answer in qas_answers %}
+          <div class="question-container">
+              <div class="noofquestion">Q{{ loop.index }}</div>
+              <div id="question">{{ qas_answer.question }}</div>
+          </div>
+          
+          <div class="toggle-container">
+            <div class="decor">Answer here:</div>
+            {% if qas_answer.check is not none %}
+<div class="toggle-buttons">
+    <input 
+        id="toggle-on-{{ loop.index }}" 
+        name="toggle-{{ loop.index }}" 
+        type="radio" 
+        value="no"
+        {% if qas_answer.check == 0 %} checked {% endif %} 
+    >
+    <label for="toggle-on-{{ loop.index }}">NO</label>
+    <input 
+        id="toggle-off-{{ loop.index }}" 
+        name="toggle-{{ loop.index }}" 
+        type="radio" 
+        value="yes"
+        {% if qas_answer.check == 1 %} checked {% endif %} 
+    >
+    <label for="toggle-off-{{ loop.index }}">YES</label>
+    <input type="hidden" name="qa_id" value="{{ qas_answer.id }}">
+</div>
+{% else %}
+
+            <div class="toggle-buttons">
+                <input 
+                    id="toggle-on-{{ loop.index }}" 
+                    name="toggle-{{ loop.index }}" 
+                    type="radio" 
+                    value="no"
+                    {% if qas_answer.check == 0 %} checked {% endif %} 
+                >
+                <label for="toggle-on-{{ loop.index }}">NO</label>
+                <input 
+                    id="toggle-off-{{ loop.index }}" 
+                    name="toggle-{{ loop.index }}" 
+                    type="radio" 
+                    value="yes"
+                    {% if qas_answer.check == 1 %} checked {% endif %} 
+                >
+                <label for="toggle-off-{{ loop.index }}">YES</label>
+                <input type="hidden" name="qa_id" value="{{ qas_answer.id }}">
+            </div>
+            {% endif %}
+        
+          </div>
+      
+          <div id="displaySelectedquestion">{{ qas_answer.answer_text }}</div>
+          
+          {% endfor %}
+      </div>
+      
+        
+        
+      
+
+
+              <button id="exportButton" style="margin-left: 65vh; margin-top: 10px;">Export JSON File</button>
+          </div>
+      </div>
+      
+    </div>
+
+
+    
+    
+  </body>
+  
+</html>
